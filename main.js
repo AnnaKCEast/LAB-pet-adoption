@@ -272,26 +272,95 @@
    
   ];
  
- const targetingApp = document.querySelector("#app");
+//  const targetingApp = document.querySelector("#app");
 
-let domString = ""
-for (const pet of pets) {
+// let domString = ""
+// for (const pet of pets) {
 
-  domString += `<div class="card" style="width: 18rem;">
+//   domString += `<div class="card" style="width: 18rem;">
      
-      <div class="card-body">
-        <h5 class="card-title">ID: ${pet.id}</h5> 
-        <img src=${pet.imageUrl} class="card-img-top" alt=${pet.name}>
-        <p class="card-text">Name: ${pet.name}</p>
+//       <div class="card-body">
+//         <h5 class="card-title">ID: ${pet.id}</h5> 
+//         <img src=${pet.imageUrl} class="card-img-top" alt=${pet.name}>
+//         <p class="card-text">Name: ${pet.name}</p>
+//         <p class="card-text">Color: ${pet.color}</p>
+//         <p class="card-text">Special Skill: ${pet.specialSkill}</p>
+//         <p class="card-text">Type of Pet: ${pet.type}</p>
+//         <p class="card-text">Favorite? ${pet.favorite ? "Totally" : "Nah"}</p>
+//       </div>
+//     </div>`;
+    
+// };
+// targetingApp.innerHTML = domString;
+
+const renderToDom = (divId, htmlToRender) => {
+  const selectedDiv = document.querySelector(divId);
+  selectedDiv.innerHTML = htmlToRender;
+};
+
+const cardsOnDom = (array) => {
+  let domString = "";
+  for (const pet of array) {
+    domString += `<div class="card" style="width: 18rem;">
+    <img src="${pet.imageUrl}" class="card-img-top" alt="${pet.name}">
+    <div class="card-body">
+    <p class="card-text">Name: ${pet.name}</p>
         <p class="card-text">Color: ${pet.color}</p>
         <p class="card-text">Special Skill: ${pet.specialSkill}</p>
         <p class="card-text">Type of Pet: ${pet.type}</p>
         <p class="card-text">Favorite? ${pet.favorite ? "Totally" : "Nah"}</p>
-      </div>
-    </div>`;
-    
+
+    </div>
+  </div>`;
+  }
+
+renderToDom("#app", domString);
 };
-targetingApp.innerHTML = domString;
 
 
-  
+
+const filter = (array, typeString) => {
+  const typeArray = [];
+
+
+for (const member of array) {
+  if (member.type === typeString) {
+   typeArray.push(member);
+  }
+}
+
+return typeArray;
+};
+
+const showDogButton = document.querySelector("#dog-btn");
+const showCatButton = document.querySelector("#cat-btn");
+const showDinoButton = document.querySelector("#dino-btn");
+const showAllButton = document.querySelector("#all-btn");
+
+//  showDogButton.addEventListener("click", (e) => {
+//   cardsOnDom(pets);
+// });
+// showCatButton.addEventListener("click", (e) => {
+//   cardsOnDom(pets);
+// });
+// showDinoButton.addEventListener("click", (e) => {
+//   cardsOnDom(pets);
+// });
+showAllButton.addEventListener("click", (e) => {
+  cardsOnDom(pets);
+});
+
+showDinoButton.addEventListener("click", (e) => {
+  const teamDino = filter(pets, "dino");
+  cardsOnDom(teamDino);
+});
+
+showCatButton.addEventListener("click", (e) => {
+  const teamCat = filter(pets, "cat");
+  cardsOnDom(teamCat);
+});
+
+showDogButton.addEventListener("click", (e) => {
+  const teamDog = filter(pets, "dog");
+  cardsOnDom(teamDog);
+});
