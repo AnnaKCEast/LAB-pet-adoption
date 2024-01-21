@@ -364,3 +364,24 @@ showDogButton.addEventListener("click", (e) => {
   const teamDog = filter(pets, "dog");
   cardsOnDom(teamDog);
 });
+
+const form = document.querySelector('form');
+// Funciton to pull element
+const createNewPet = (e) => {
+  e.preventDefault();
+
+  const newAnimalObj = {
+    id: pets.length + 1,
+    name: document.querySelector("#name").value,
+    color: document.querySelector("#color").value,
+    type: document.querySelector("#type").value,
+    specialSkill: document.querySelector("#special-skill").value,
+    imageUrl: document.querySelector("#image").value
+  }
+
+pets.push(newAnimalObj);
+cardsOnDom(pets);
+form.reset()
+}
+// Creating event listener for submit button
+form.addEventListener('submit', createNewPet)
