@@ -1,3 +1,4 @@
+ let filterToggle = true;
  const pets = [
     {
       id: 1,
@@ -309,7 +310,7 @@ const cardsOnDom = (array) => {
         <p class="card-text">Special Skill: ${pet.specialSkill}</p>
         <p class="card-text">Type of Pet: ${pet.type}</p>
         <p class="card-text">Favorite? ${pet.favorite ? "Totally" : "Nah"}</p>
-
+        <button class="btn btn-danger" id="delete--${pet.id}--${pet.type}">Delete</button>
     </div>
   </div>`;
   }
@@ -319,17 +320,18 @@ renderToDom("#app", domString);
 
 
 
-const filter = (array, typeString) => {
+const filter = (typeString) => {
+  filterToggle = false;
   const typeArray = [];
 
 
-for (const member of array) {
+for (const member of pets) {
   if (member.type === typeString) {
    typeArray.push(member);
   }
 }
 
-return typeArray;
+cardsOnDom(typeArray);
 };
 
 const showDogButton = document.querySelector("#dog-btn");
@@ -347,22 +349,23 @@ const showAllButton = document.querySelector("#all-btn");
 //   cardsOnDom(pets);
 // });
 showAllButton.addEventListener("click", (e) => {
+  filterToggle = true;
   cardsOnDom(pets);
 });
 
 showDinoButton.addEventListener("click", (e) => {
-  const teamDino = filter(pets, "dino");
-  cardsOnDom(teamDino);
+  filter("dino");
+  
 });
 
 showCatButton.addEventListener("click", (e) => {
-  const teamCat = filter(pets, "cat");
-  cardsOnDom(teamCat);
+  filter("cat");
+ 
 });
 
 showDogButton.addEventListener("click", (e) => {
-  const teamDog = filter(pets, "dog");
-  cardsOnDom(teamDog);
+  filter("dog");
+  
 });
 
 const form = document.querySelector('form');
@@ -376,7 +379,8 @@ const createNewPet = (e) => {
     color: document.querySelector("#color").value,
     type: document.querySelector("#type").value,
     specialSkill: document.querySelector("#special-skill").value,
-    imageUrl: document.querySelector("#image").value
+    imageUrl: document.querySelector("#image").value,
+   
   }
 
 pets.push(newAnimalObj);
@@ -385,3 +389,41 @@ form.reset()
 }
 // Creating event listener for submit button
 form.addEventListener('submit', createNewPet)
+
+// Target the app div
+const app = document.querySelector("#app");
+// Add click event listener 
+app.addEventListener('click', (e) => {
+
+  // check to see if the target includes delete
+  if (e.target.id.includes("delete")) {
+  console.log("hello there") 
+
+// destructure the array 
+    const [ , id] = e.target.id.split("--");
+
+    // find the index of pets
+    const index = pets.findIndex((e) => e.id === Number(id));
+    const pet = pets.find((p) => p.id === Number(id))
+    console.log(pet)
+
+    //  Splice modifies the original array to where it only takes 1 card. 
+    pets.splice(index, 1);
+
+    // Repaint the DOM with updated array
+    
+    if (filterToggle) {
+      cardOnDom (pets)
+    } else {
+      filter(pet.type);
+    }
+    
+
+   }
+})
+
+const startApp = () => {
+  cardsOnDom(pets)
+}
+
+startApp();
